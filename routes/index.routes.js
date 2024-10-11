@@ -25,4 +25,19 @@ router.post('/books', isAuthenticated, async (req, res, next) => {
   }
 })
 
+router.delete('/books/:bookId', isAuthenticated, async (req, res, next) => {
+  const { bookId } = req.params
+  try {
+    const bookTarget = await Book.findById(bookId)
+    if (bookTarget.createdBy == req.tokenPayload.userId) {
+      const newBook = await Book.findByIdAndDelete(bookId)
+      res.status(204).json(newBook)
+    } else {
+      res.status(401).json({ message: 'You cannot delete books that are not yours' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

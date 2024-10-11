@@ -39,10 +39,10 @@ router.post('/login', async (req, res, next) => {
         })
         res.json({ token: authToken })
       } else {
-        res.json({ message: 'Incorrect password' })
+        res.status(401).json({ message: 'Incorrect password' })
       }
     } else {
-      res.json({ message: 'No user with this username' })
+      res.status(404).json({ message: 'No user with this username' })
     }
   } catch (error) {
     next(error)
